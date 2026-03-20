@@ -1,0 +1,50 @@
+<UserControl x:Class="EWMS_WPF.Views.StockOut.StockOutListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Stock Out - Issue Goods" FontSize="24" FontWeight="Bold"/>
+            <TextBlock Text="Select sales orders pending for stock out" FontSize="12" Foreground="Gray" Margin="0,5,0,0"/>
+        </StackPanel>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
+            <Button Content="🔄 Refresh" Padding="15,8" Command="{Binding LoadPendingOrdersCommand}"/>
+        </StackPanel>
+
+        <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
+            <DataGrid ItemsSource="{Binding PendingSalesOrders}" 
+                     AutoGenerateColumns="False"
+                     IsReadOnly="True"
+                     CanUserAddRows="False"
+                     RowHeight="40"
+                     AlternatingRowBackground="#F9F9F9">
+                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="SO ID" Binding="{Binding SalesOrderId}" Width="80"/>
+                    <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
+                    <DataGridTextColumn Header="Phone" Binding="{Binding CustomerPhone}" Width="120"/>
+                    <DataGridTextColumn Header="Order Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}" Width="120"/>
+                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N0} VND'}" Width="150"/>
+                    
+                    <DataGridTemplateColumn Header="Actions" Width="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Issue Goods" Padding="10,5"
+                                       Background="#FF9800" Foreground="White"
+                                       Tag="{Binding SalesOrderId}"
+                                       Click="BtnIssue_Click"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+    </Grid>
+</UserControl>
