@@ -149,6 +149,7 @@ public partial class EWMSDbContext : DbContext
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(100);
+            
         });
 
         modelBuilder.Entity<PurchaseOrder>(entity =>
