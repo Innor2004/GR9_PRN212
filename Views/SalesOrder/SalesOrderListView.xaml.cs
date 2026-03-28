@@ -27,13 +27,22 @@ namespace EWMS_WPF.Views.SalesOrder
                 _viewModel.OnNavigateToDetails?.Invoke(salesOrderId);
             }
         }
+
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int salesOrderId)
+            {
+                _viewModel.OnNavigateToEdit?.Invoke(salesOrderId);
+            }
+        }
     }
 
     public class StatusToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string status && status == "Pending")
+            var status = (value as string)?.Trim();
+            if (string.Equals(status, "Pending", StringComparison.OrdinalIgnoreCase))
                 return Visibility.Visible;
             return Visibility.Collapsed;
         }

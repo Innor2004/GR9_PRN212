@@ -131,6 +131,7 @@ namespace EWMS_WPF.BLL
         }
 
         public Action<int>? OnNavigateToDetails { get; set; }
+        public Action<int>? OnNavigateToEdit { get; set; }
         public Action? OnNavigateToCreate { get; set; }
     }
 }
