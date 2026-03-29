@@ -24,5 +24,10 @@ namespace EWMS_WPF.Views.StockIn
                 _viewModel.OnNavigateToReceive?.Invoke(purchaseOrderId);
             }
         }
+
+        private void BtnHistory_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.OnNavigateToHistory?.Invoke();
+        }
     }
 }
