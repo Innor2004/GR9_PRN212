@@ -149,11 +149,7 @@ public partial class EWMSDbContext : DbContext
 
             entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
             entity.Property(e => e.CategoryName).HasMaxLength(100);
-            entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
-
-            entity.HasOne(d => d.Supplier).WithMany(p => p.ProductCategories)
-                .HasForeignKey(d => d.SupplierId)
-                .HasConstraintName("FK_ProductCategories_Suppliers");
+            
         });
 
         modelBuilder.Entity<PurchaseOrder>(entity =>

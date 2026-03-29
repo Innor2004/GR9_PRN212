@@ -64,6 +64,18 @@ namespace EWMS_WPF.Views
                 
                 MainFrame.Navigate(createView);
             };
+
+            viewModel.OnNavigateToEdit = (id) =>
+            {
+                var editViewModel = App.ServiceProvider.GetRequiredService<SalesOrderEditViewModel>();
+                var editView = new SalesOrder.SalesOrderEditView(editViewModel);
+
+                editViewModel.OnSaveSuccess = () => BtnSalesOrders_Click(sender, e);
+                editViewModel.OnCancel = () => BtnSalesOrders_Click(sender, e);
+
+                MainFrame.Navigate(editView);
+                editView.LoadSalesOrder(id);
+            };
             
             MainFrame.Navigate(listView);
         }
