@@ -20,6 +20,9 @@ namespace EWMS_WPF.BLL
         private ObservableCollection<SalesOrder> _pendingSalesOrders = new();
 
         [ObservableProperty]
+        private ObservableCollection<SalesOrder> _historyOrders = new();
+
+        [ObservableProperty]
         private SalesOrder? _salesOrder;
 
         [ObservableProperty]
@@ -30,6 +33,11 @@ namespace EWMS_WPF.BLL
 
         [ObservableProperty]
         private bool _isLoading;
+
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        private ObservableCollection<SalesOrder> _allSalesOrders = new();
 
         public StockOutViewModel(IUnitOfWork unitOfWork, SessionService sessionService)
         {
@@ -48,11 +56,14 @@ namespace EWMS_WPF.BLL
                 var orders = await _unitOfWork.SalesOrders.GetQueryable()
                     .Include(so => so.SalesOrderDetails)
                         .ThenInclude(sod => sod.Product)
-                    .Where(so => so.WarehouseId == warehouseId && so.Status == "Pending")
+                    .Where(so => so.WarehouseId == warehouseId && 
+                                (so.Status == "Pending" || so.Status == "PartiallyIssued"))
                     .OrderByDescending(so => so.CreatedAt)
                     .ToListAsync();
 
-                PendingSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                _allSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                PendingSalesOrders = _allSalesOrders;
+                SearchText = string.Empty;
             }
             catch (Exception ex)
             {
@@ -61,6 +72,28 @@ namespace EWMS_WPF.BLL
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private void Search()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                PendingSalesOrders = _allSalesOrders;
+                HistoryOrders = _allSalesOrders;
+                return;
+            }
+
+            if (int.TryParse(SearchText.Trim(), out int soId))
+            {
+                var filtered = _allSalesOrders.Where(so => so.SalesOrderId == soId).ToList();
+                PendingSalesOrders = new ObservableCollection<SalesOrder>(filtered);
+                HistoryOrders = new ObservableCollection<SalesOrder>(filtered);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Sales Order ID (number)", "Invalid Search", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -92,10 +125,23 @@ namespace EWMS_WPF.BLL
                     .Where(inv => inv.Location.WarehouseId == warehouseId)
                     .ToListAsync();
 
+                // Get already issued quantities from StockOutDetails
+                var issuedQuantities = await _unitOfWork.StockOutDetails.GetQueryable()
+                    .Where(sod => sod.StockOut.SalesOrderId == salesOrderId)
+                    .GroupBy(sod => sod.ProductId)
+                    .Select(g => new { ProductId = g.Key, TotalIssued = g.Sum(x => x.Quantity) })
+                    .ToListAsync();
+
                 // Create issue items
                 var items = new ObservableCollection<IssueLineItem>();
                 foreach (var detail in SalesOrder.SalesOrderDetails)
                 {
+                    var alreadyIssued = issuedQuantities.FirstOrDefault(r => r.ProductId == detail.ProductId)?.TotalIssued ?? 0;
+                    var remaining = detail.Quantity - alreadyIssued;
+
+                    if (remaining <= 0) // Skip items that are fully issued
+                        continue;
+
                     // Get inventory for this product
                     var productInventory = allInventory.Where(inv => inv.ProductId == detail.ProductId).ToList();
                     var totalAvailable = productInventory.Sum(inv => inv.Quantity ?? 0);
@@ -105,8 +151,10 @@ namespace EWMS_WPF.BLL
                         ProductId = detail.ProductId,
                         Product = detail.Product,
                         OrderedQuantity = detail.Quantity,
+                        AlreadyIssuedQuantity = alreadyIssued,
+                        RemainingQuantity = remaining,
                         AvailableStock = totalAvailable,
-                        IssueQuantity = Math.Min(detail.Quantity, totalAvailable), // Default to min of ordered and available
+                        IssueQuantity = Math.Min(remaining, totalAvailable), // Default to min of remaining and available
                         AllInventories = productInventory
                     };
 
@@ -164,6 +212,13 @@ namespace EWMS_WPF.BLL
 
             foreach (var item in IssueItems.Where(i => i.IssueQuantity > 0))
             {
+                if (item.IssueQuantity > item.RemainingQuantity)
+                {
+                    MessageBox.Show($"Issue quantity for {item.Product.ProductName} exceeds remaining quantity!", 
+                        "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 if (item.IssueQuantity > item.AvailableStock)
                 {
                     MessageBox.Show($"Issue quantity for {item.Product.ProductName} exceeds available stock!", 
@@ -243,8 +298,23 @@ namespace EWMS_WPF.BLL
                     }
                 }
 
-                // Update SalesOrder status
-                SalesOrder.Status = "Completed";
+                // Update SalesOrder status - Check if all items are fully issued
+                var totalOrdered = SalesOrder.SalesOrderDetails.Sum(d => d.Quantity);
+                var totalIssued = await _unitOfWork.StockOutDetails.GetQueryable()
+                    .Where(sod => sod.StockOut.SalesOrderId == SalesOrder.SalesOrderId)
+                    .SumAsync(sod => sod.Quantity);
+
+                totalIssued += IssueItems.Where(i => i.IssueQuantity > 0).Sum(i => i.IssueQuantity);
+
+                if (totalIssued >= totalOrdered)
+                {
+                    SalesOrder.Status = "Completed";
+                }
+                else
+                {
+                    SalesOrder.Status = "PartiallyIssued";
+                }
+
                 _unitOfWork.SalesOrders.Update(SalesOrder);
 
                 await _unitOfWork.SaveChangesAsync();
@@ -264,6 +334,36 @@ namespace EWMS_WPF.BLL
         }
 
         [RelayCommand]
+        public async Task LoadHistoryOrdersAsync()
+        {
+            IsLoading = true;
+            try
+            {
+                var warehouseId = _sessionService.CurrentSession?.WarehouseId ?? 0;
+                
+                var orders = await _unitOfWork.SalesOrders.GetQueryable()
+                    .Include(so => so.SalesOrderDetails)
+                        .ThenInclude(sod => sod.Product)
+                    .Where(so => so.WarehouseId == warehouseId && 
+                                (so.Status == "Completed" || so.Status == "Cancelled"))
+                    .OrderByDescending(so => so.CreatedAt)
+                    .ToListAsync();
+
+                _allSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                HistoryOrders = _allSalesOrders;
+                SearchText = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
         private void BackToList()
         {
             OnNavigateBackToList?.Invoke();
@@ -271,6 +371,7 @@ namespace EWMS_WPF.BLL
 
         public Action<int>? OnNavigateToIssue { get; set; }
         public Action? OnNavigateBackToList { get; set; }
+        public Action? OnNavigateToHistory { get; set; }
     }
 
     public partial class IssueLineItem : ObservableObject
@@ -283,6 +384,12 @@ namespace EWMS_WPF.BLL
 
         [ObservableProperty]
         private int _orderedQuantity;
+
+        [ObservableProperty]
+        private int _alreadyIssuedQuantity;
+
+        [ObservableProperty]
+        private int _remainingQuantity;
 
         [ObservableProperty]
         private int _availableStock;

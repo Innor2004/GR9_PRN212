@@ -21,6 +21,9 @@ namespace EWMS_WPF.BLL
         private ObservableCollection<PurchaseOrder> _pendingPurchaseOrders = new();
 
         [ObservableProperty]
+        private ObservableCollection<PurchaseOrder> _historyOrders = new();
+
+        [ObservableProperty]
         private PurchaseOrder? _purchaseOrder;
 
         [ObservableProperty]
@@ -31,6 +34,11 @@ namespace EWMS_WPF.BLL
 
         [ObservableProperty]
         private bool _isLoading;
+
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        private ObservableCollection<PurchaseOrder> _allPurchaseOrders = new();
 
         public StockInViewModel(IUnitOfWork unitOfWork, SessionService sessionService)
         {
@@ -55,7 +63,9 @@ namespace EWMS_WPF.BLL
                     .OrderByDescending(po => po.CreatedAt)
                     .ToListAsync();
 
-                PendingPurchaseOrders = new ObservableCollection<PurchaseOrder>(orders);
+                _allPurchaseOrders = new ObservableCollection<PurchaseOrder>(orders);
+                PendingPurchaseOrders = _allPurchaseOrders;
+                SearchText = string.Empty;
             }
             catch (Exception ex)
             {
@@ -64,6 +74,28 @@ namespace EWMS_WPF.BLL
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private void Search()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                PendingPurchaseOrders = _allPurchaseOrders;
+                HistoryOrders = _allPurchaseOrders;
+                return;
+            }
+
+            if (int.TryParse(SearchText.Trim(), out int poId))
+            {
+                var filtered = _allPurchaseOrders.Where(po => po.PurchaseOrderId == poId).ToList();
+                PendingPurchaseOrders = new ObservableCollection<PurchaseOrder>(filtered);
+                HistoryOrders = new ObservableCollection<PurchaseOrder>(filtered);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Purchase Order ID (number)", "Invalid Search", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
@@ -272,6 +304,37 @@ namespace EWMS_WPF.BLL
         }
 
         [RelayCommand]
+        public async Task LoadHistoryOrdersAsync()
+        {
+            IsLoading = true;
+            try
+            {
+                var warehouseId = _sessionService.CurrentSession?.WarehouseId ?? 0;
+                
+                var orders = await _unitOfWork.PurchaseOrders.GetQueryable()
+                    .Include(po => po.Supplier)
+                    .Include(po => po.PurchaseOrderDetails)
+                        .ThenInclude(pod => pod.Product)
+                    .Where(po => po.WarehouseId == warehouseId && 
+                                (po.Status == "Received" || po.Status == "Cancelled"))
+                    .OrderByDescending(po => po.CreatedAt)
+                    .ToListAsync();
+
+                _allPurchaseOrders = new ObservableCollection<PurchaseOrder>(orders);
+                HistoryOrders = _allPurchaseOrders;
+                SearchText = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
         private void BackToList()
         {
             OnNavigateBackToList?.Invoke();
@@ -279,6 +342,7 @@ namespace EWMS_WPF.BLL
 
         public Action<int>? OnNavigateToReceive { get; set; }
         public Action? OnNavigateBackToList { get; set; }
+        public Action? OnNavigateToHistory { get; set; }
     }
 
     public partial class ReceiveLineItem : ObservableObject

@@ -134,6 +134,7 @@ namespace EWMS_WPF.BLL
                         ProductName = inv.Product.ProductName,
                         CategoryName = inv.Product.Category?.CategoryName ?? "N/A",
                         Quantity = inv.Quantity ?? 0,
+                        UnitPrice = inv.Product.SellingPrice ?? 0,
                         LastUpdated = inv.LastUpdated ?? DateTime.Now
                     })
                 ).ToList();
@@ -164,6 +165,9 @@ namespace EWMS_WPF.BLL
 
         [ObservableProperty]
         private int _quantity;
+
+        [ObservableProperty]
+        private decimal _unitPrice;
 
         [ObservableProperty]
         private DateTime _lastUpdated;
