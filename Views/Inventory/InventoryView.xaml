@@ -24,10 +24,10 @@
             <DataGrid ItemsSource="{Binding InventoryItems}" AutoGenerateColumns="False" IsReadOnly="True"
                      CanUserAddRows="False" RowHeight="40" AlternatingRowBackground="#F9F9F9">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Location" Binding="{Binding LocationCode}" Width="150"/>
+                    <DataGridTextColumn Header="Location" Binding="{Binding LocationCode}" Width="120"/>
                     <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="*"/>
-                    <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="150"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="100">
+                    <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="130"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="90">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="Bold"/>
@@ -35,7 +35,16 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Width="150"/>
+                    <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice, StringFormat='{}{0:N0} VND'}" Width="120">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                <Setter Property="Foreground" Value="#FF9800"/>
+                                <Setter Property="TextAlignment" Value="Right"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Width="140"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
