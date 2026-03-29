@@ -31,11 +31,18 @@
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="PO ID" Binding="{Binding PurchaseOrderId}" Width="80"/>
-                    <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.SupplierName}" Width="*"/>
-                    <DataGridTextColumn Header="Order Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}" Width="120"/>
-                    <DataGridTextColumn Header="Expected Date" Binding="{Binding ExpectedReceivingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="120"/>
-                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N0} VND'}" Width="150"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="150"/>
+                    <DataGridTextColumn Header="Supplier" Binding="{Binding Supplier.SupplierName}" Width="150"/>
+                    <DataGridTemplateColumn Header="Products" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ProductsText}" TextWrapping="Wrap" Margin="5,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Order Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}" Width="110"/>
+                    <DataGridTextColumn Header="Expected Date" Binding="{Binding ExpectedReceivingDate, StringFormat='{}{0:dd/MM/yyyy}'}" Width="110"/>
+                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N0} VND'}" Width="130"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="130"/>
                     
                     <DataGridTemplateColumn Header="Actions" Width="150">
                         <DataGridTemplateColumn.CellTemplate>

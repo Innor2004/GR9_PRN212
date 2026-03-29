@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EWMS_WPF.Models;
 
@@ -34,4 +35,8 @@ public partial class SalesOrder
     public virtual ICollection<StockOutReceipt> StockOutReceipts { get; set; } = new List<StockOutReceipt>();
 
     public virtual Warehouse Warehouse { get; set; } = null!;
+
+    public string ProductsText => SalesOrderDetails != null && SalesOrderDetails.Any()
+        ? string.Join(", ", SalesOrderDetails.Select(d => d.Product?.ProductName ?? "N/A"))
+        : "No products";
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace EWMS_WPF.Models;
 
@@ -32,4 +33,8 @@ public partial class PurchaseOrder
     public virtual Supplier Supplier { get; set; } = null!;
 
     public virtual Warehouse Warehouse { get; set; } = null!;
+
+    public string ProductsText => PurchaseOrderDetails != null && PurchaseOrderDetails.Any()
+        ? string.Join(", ", PurchaseOrderDetails.Select(d => d.Product?.ProductName ?? "N/A"))
+        : "No products";
 }

@@ -31,10 +31,18 @@
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="SO ID" Binding="{Binding SalesOrderId}" Width="80"/>
-                    <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="*"/>
-                    <DataGridTextColumn Header="Phone" Binding="{Binding CustomerPhone}" Width="120"/>
-                    <DataGridTextColumn Header="Order Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}" Width="120"/>
-                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N0} VND'}" Width="150"/>
+                    <DataGridTextColumn Header="Customer" Binding="{Binding CustomerName}" Width="150"/>
+                    <DataGridTextColumn Header="Phone" Binding="{Binding CustomerPhone}" Width="110"/>
+                    <DataGridTemplateColumn Header="Products" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ProductsText}" TextWrapping="Wrap" Margin="5,2"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Order Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy}'}" Width="110"/>
+                    <DataGridTextColumn Header="Total Amount" Binding="{Binding TotalAmount, StringFormat='{}{0:N0} VND'}" Width="130"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="120"/>
                     
                     <DataGridTemplateColumn Header="Actions" Width="150">
                         <DataGridTemplateColumn.CellTemplate>
