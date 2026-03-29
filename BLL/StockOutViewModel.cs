@@ -20,6 +20,9 @@ namespace EWMS_WPF.BLL
         private ObservableCollection<SalesOrder> _pendingSalesOrders = new();
 
         [ObservableProperty]
+        private ObservableCollection<SalesOrder> _historyOrders = new();
+
+        [ObservableProperty]
         private SalesOrder? _salesOrder;
 
         [ObservableProperty]
@@ -78,6 +81,7 @@ namespace EWMS_WPF.BLL
             if (string.IsNullOrWhiteSpace(SearchText))
             {
                 PendingSalesOrders = _allSalesOrders;
+                HistoryOrders = _allSalesOrders;
                 return;
             }
 
@@ -85,6 +89,7 @@ namespace EWMS_WPF.BLL
             {
                 var filtered = _allSalesOrders.Where(so => so.SalesOrderId == soId).ToList();
                 PendingSalesOrders = new ObservableCollection<SalesOrder>(filtered);
+                HistoryOrders = new ObservableCollection<SalesOrder>(filtered);
             }
             else
             {
@@ -329,6 +334,36 @@ namespace EWMS_WPF.BLL
         }
 
         [RelayCommand]
+        public async Task LoadHistoryOrdersAsync()
+        {
+            IsLoading = true;
+            try
+            {
+                var warehouseId = _sessionService.CurrentSession?.WarehouseId ?? 0;
+                
+                var orders = await _unitOfWork.SalesOrders.GetQueryable()
+                    .Include(so => so.SalesOrderDetails)
+                        .ThenInclude(sod => sod.Product)
+                    .Where(so => so.WarehouseId == warehouseId && 
+                                (so.Status == "Completed" || so.Status == "Cancelled"))
+                    .OrderByDescending(so => so.CreatedAt)
+                    .ToListAsync();
+
+                _allSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                HistoryOrders = _allSalesOrders;
+                SearchText = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
         private void BackToList()
         {
             OnNavigateBackToList?.Invoke();
@@ -336,6 +371,7 @@ namespace EWMS_WPF.BLL
 
         public Action<int>? OnNavigateToIssue { get; set; }
         public Action? OnNavigateBackToList { get; set; }
+        public Action? OnNavigateToHistory { get; set; }
     }
 
     public partial class IssueLineItem : ObservableObject

@@ -59,6 +59,13 @@ namespace EWMS_WPF.Views
                 MainFrame.Navigate(listView);
             };
             
+            viewModel.OnNavigateToHistory = async () =>
+            {
+                await viewModel.LoadHistoryOrdersAsync();
+                var historyView = new StockIn.StockInHistoryView { DataContext = viewModel };
+                MainFrame.Navigate(historyView);
+            };
+            
             var listView = new StockIn.StockInListView(viewModel);
             MainFrame.Navigate(listView);
         }
@@ -79,6 +86,13 @@ namespace EWMS_WPF.Views
             {
                 var listView = new StockOut.StockOutListView(viewModel);
                 MainFrame.Navigate(listView);
+            };
+            
+            viewModel.OnNavigateToHistory = async () =>
+            {
+                await viewModel.LoadHistoryOrdersAsync();
+                var historyView = new StockOut.StockOutHistoryView { DataContext = viewModel };
+                MainFrame.Navigate(historyView);
             };
             
             var listView = new StockOut.StockOutListView(viewModel);
