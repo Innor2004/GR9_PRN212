@@ -278,23 +278,7 @@
                         </TextBlock>
                     </Grid>
 
-                    <!-- Role filter -->
-                    <ComboBox x:Name="cmbRole" Style="{StaticResource RoleFilter}"
-                              SelectedIndex="{Binding RoleFilterIndex}" Margin="0,0,12,0">
-                        <ComboBoxItem Content="Tất cả vai trò"/>
-                        <ComboBoxItem Content="Admin"/>
-                        <ComboBoxItem Content="Manager"/>
-                        <ComboBoxItem Content="Staff"/>
-                        <ComboBoxItem Content="Viewer"/>
-                    </ComboBox>
-
-                    <!-- Status filter -->
-                    <ComboBox x:Name="cmbStatus" Style="{StaticResource RoleFilter}"
-                              SelectedIndex="{Binding StatusFilterIndex}">
-                        <ComboBoxItem Content="Tất cả trạng thái"/>
-                        <ComboBoxItem Content="Đang hoạt động"/>
-                        <ComboBoxItem Content="Bị khóa"/>
-                    </ComboBox>
+                    
                 </StackPanel>
 
                 <!-- Right: Add button -->
@@ -444,37 +428,6 @@
             </DataGrid>
         </Border>
 
-        <!-- =========================================================
-             ROW 3 – FOOTER / PAGER
-             ========================================================= -->
-        <Border Grid.Row="3"
-                Background="{StaticResource BgCard}"
-                BorderBrush="{StaticResource BorderSubtle}"
-                BorderThickness="0,1,0,0"
-                Padding="24,12">
-            <Grid>
-                <TextBlock x:Name="txtPagerInfo"
-                           Text="{Binding PagerInfo}"
-                           FontFamily="Segoe UI" FontSize="12"
-                           Foreground="{StaticResource TextSecondary}"
-                           VerticalAlignment="Center"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button x:Name="btnPrevPage" Content="← Trước"
-                            Style="{StaticResource BtnPrimary}"
-                            Background="#22263A" Margin="0,0,8,0"
-                            Command="{Binding PrevPageCommand}"
-                            IsEnabled="{Binding CanPrevPage}"/>
-                    <Border Background="#4F8EF7" CornerRadius="6" Padding="14,9" Margin="0,0,8,0">
-                        <TextBlock Text="{Binding CurrentPage}" FontFamily="Segoe UI Semibold" FontSize="13"
-                                   Foreground="White"/>
-                    </Border>
-                    <Button x:Name="btnNextPage" Content="Tiếp →"
-                            Style="{StaticResource BtnPrimary}"
-                            Command="{Binding NextPageCommand}"
-                            IsEnabled="{Binding CanNextPage}"/>
-                </StackPanel>
-            </Grid>
-        </Border>
+        
     </Grid>
 </UserControl>
