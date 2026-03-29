@@ -132,6 +132,9 @@ namespace EWMS_WPF.BLL
         [RelayCommand]
         private async Task SaveAsync()
         {
+            if (IsLoading)
+                return;
+
             if (SelectedSupplier == null)
             {
                 MessageBox.Show("Please select a supplier.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -141,6 +144,13 @@ namespace EWMS_WPF.BLL
             if (ProductItems.Count == 0)
             {
                 MessageBox.Show("Please add at least one product.", "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (ExpectedDate.Date < DateTime.Now.Date)
+            {
+                MessageBox.Show("Expected receiving date cannot be earlier than the order creation date.",
+                    "Validation", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -181,14 +191,14 @@ namespace EWMS_WPF.BLL
 
                 await _unitOfWork.SaveChangesAsync();
 
-                MessageBox.Show($"Purchase Order PO-{purchaseOrder.PurchaseOrderId:D4} created successfully!", 
+                MessageBox.Show($"Purchase Order PO-{purchaseOrder.PurchaseOrderId:D4} created successfully!",
                     "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 OnSaveSuccess?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error creating purchase order: {ex.Message}", "Error", 
+                MessageBox.Show($"Error creating purchase order: {ex.Message}", "Error",
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
