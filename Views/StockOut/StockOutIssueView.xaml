@@ -57,7 +57,7 @@
                      AlternatingRowBackground="#F9F9F9">
                 
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Product Code" Binding="{Binding Product.ProductCode}" Width="120" IsReadOnly="True"/>
+                    <DataGridTextColumn Header="Product ID" Binding="{Binding Product.ProductId}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Product Name" Binding="{Binding Product.ProductName}" Width="*" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Ordered Qty" Binding="{Binding OrderedQuantity}" Width="100" IsReadOnly="True"/>
                     <DataGridTextColumn Header="Available Stock" Binding="{Binding AvailableStock}" Width="130" IsReadOnly="True"/>

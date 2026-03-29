@@ -17,17 +17,16 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
             <TextBlock Text="Select Rack:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="SemiBold"/>
             <ComboBox ItemsSource="{Binding Racks}" SelectedItem="{Binding SelectedRack}" Width="150" Height="35"/>
-            <Button Content="🔄 Refresh" Margin="15,0,0,0" Padding="15,8" Command="{Binding LoadInventoryCommand}"/>
         </StackPanel>
 
         <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">
             <DataGrid ItemsSource="{Binding InventoryItems}" AutoGenerateColumns="False" IsReadOnly="True"
                      CanUserAddRows="False" RowHeight="40" AlternatingRowBackground="#F9F9F9">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Location" Binding="{Binding LocationCode}" Width="120"/>
-                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="*"/>
-                    <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="130"/>
-                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="90">
+                    <DataGridTextColumn Header="Location" Binding="{Binding LocationCode}" Width="1*"/>
+                    <DataGridTextColumn Header="Product" Binding="{Binding ProductName}" Width="5*"/>
+                    <DataGridTextColumn Header="Category" Binding="{Binding CategoryName}" Width="2*"/>
+                    <DataGridTextColumn Header="Quantity" Binding="{Binding Quantity}" Width="1*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="Bold"/>
@@ -35,16 +34,16 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice, StringFormat='{}{0:N0} VND'}" Width="120">
+                    <DataGridTextColumn Header="Unit Price" Binding="{Binding UnitPrice, StringFormat='{}{0:N0} VND'}" Width="2*">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                 <Setter Property="Foreground" Value="#FF9800"/>
-                                <Setter Property="TextAlignment" Value="Right"/>
+                                <Setter Property="TextAlignment" Value="Left"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Width="140"/>
+                    <DataGridTextColumn Header="Last Updated" Binding="{Binding LastUpdated, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Width="2*"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Border>
