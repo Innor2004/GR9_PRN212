@@ -14,7 +14,7 @@ namespace EWMS_WPF.Views
             _sessionService = sessionService;
             LoadUserInfo();
             
-            // Auto load Inventory on startup
+            
             Loaded += (s, e) => BtnInventory_Click(s, e);
         }
 

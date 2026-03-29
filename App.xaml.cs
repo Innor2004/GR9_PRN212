@@ -54,7 +54,8 @@ public partial class App : Application
         services.AddTransient<StockInViewModel>();
         services.AddTransient<StockOutViewModel>();
         services.AddTransient<InventoryViewModel>();
-
+        services.AddTransient<ProductCRUDViewModel>();
+        services.AddTransient<UserCRUDViewModel>();
         // Views
         services.AddTransient<LoginWindow>();
         services.AddTransient<MainWindowPurchase>();
@@ -69,6 +70,9 @@ public partial class App : Application
         services.AddTransient<Views.StockIn.StockInListView>();
         services.AddTransient<Views.StockOut.StockOutListView>();
         services.AddTransient<Views.Inventory.InventoryView>();
+        services.AddTransient<MainWindowAdmin>();
+        services.AddTransient<Views.Admin.UserCreate>();
+        services.AddTransient<Views.Admin.ProductCRUD>();
     }
 
     protected override void OnExit(ExitEventArgs e)

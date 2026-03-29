@@ -41,6 +41,10 @@ namespace EWMS_WPF.Views
                         {
                             mainWindow = App.ServiceProvider.GetRequiredService<MainWindowInventory>();
                         }
+                        else if(role.Contains("admin"))
+                        {
+                            mainWindow = App.ServiceProvider.GetRequiredService<MainWindowAdmin>();
+                        }
                         else
                         {
                             MessageBox.Show("Unknown role. Please contact administrator.", "Error");
