@@ -45,6 +45,7 @@ namespace EWMS_WPF.Views.PurchaseOrder
                 txtSupplier.Text = po.Supplier?.SupplierName ?? "N/A";
                 txtCreatedDate.Text = po.CreatedAt.ToString("dd/MM/yyyy HH:mm");
                 txtTotalAmount.Text = $"{po.TotalAmount:N0} VND";
+                txtNotes.Text = string.IsNullOrWhiteSpace(po.Notes) ? "No notes" : po.Notes;
 
                 dgProducts.ItemsSource = po.PurchaseOrderDetails.ToList();
             }
