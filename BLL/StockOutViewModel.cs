@@ -31,6 +31,11 @@ namespace EWMS_WPF.BLL
         [ObservableProperty]
         private bool _isLoading;
 
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        private ObservableCollection<SalesOrder> _allSalesOrders = new();
+
         public StockOutViewModel(IUnitOfWork unitOfWork, SessionService sessionService)
         {
             _unitOfWork = unitOfWork;
@@ -52,7 +57,9 @@ namespace EWMS_WPF.BLL
                     .OrderByDescending(so => so.CreatedAt)
                     .ToListAsync();
 
-                PendingSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                _allSalesOrders = new ObservableCollection<SalesOrder>(orders);
+                PendingSalesOrders = _allSalesOrders;
+                SearchText = string.Empty;
             }
             catch (Exception ex)
             {
@@ -61,6 +68,26 @@ namespace EWMS_WPF.BLL
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private void Search()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                PendingSalesOrders = _allSalesOrders;
+                return;
+            }
+
+            if (int.TryParse(SearchText.Trim(), out int soId))
+            {
+                var filtered = _allSalesOrders.Where(so => so.SalesOrderId == soId).ToList();
+                PendingSalesOrders = new ObservableCollection<SalesOrder>(filtered);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Sales Order ID (number)", "Invalid Search", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 

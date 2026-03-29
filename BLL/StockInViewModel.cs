@@ -32,6 +32,11 @@ namespace EWMS_WPF.BLL
         [ObservableProperty]
         private bool _isLoading;
 
+        [ObservableProperty]
+        private string _searchText = string.Empty;
+
+        private ObservableCollection<PurchaseOrder> _allPurchaseOrders = new();
+
         public StockInViewModel(IUnitOfWork unitOfWork, SessionService sessionService)
         {
             _unitOfWork = unitOfWork;
@@ -55,7 +60,9 @@ namespace EWMS_WPF.BLL
                     .OrderByDescending(po => po.CreatedAt)
                     .ToListAsync();
 
-                PendingPurchaseOrders = new ObservableCollection<PurchaseOrder>(orders);
+                _allPurchaseOrders = new ObservableCollection<PurchaseOrder>(orders);
+                PendingPurchaseOrders = _allPurchaseOrders;
+                SearchText = string.Empty;
             }
             catch (Exception ex)
             {
@@ -64,6 +71,26 @@ namespace EWMS_WPF.BLL
             finally
             {
                 IsLoading = false;
+            }
+        }
+
+        [RelayCommand]
+        private void Search()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                PendingPurchaseOrders = _allPurchaseOrders;
+                return;
+            }
+
+            if (int.TryParse(SearchText.Trim(), out int poId))
+            {
+                var filtered = _allPurchaseOrders.Where(po => po.PurchaseOrderId == poId).ToList();
+                PendingPurchaseOrders = new ObservableCollection<PurchaseOrder>(filtered);
+            }
+            else
+            {
+                MessageBox.Show("Please enter a valid Purchase Order ID (number)", "Invalid Search", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
 
