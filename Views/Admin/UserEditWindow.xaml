@@ -1,0 +1,47 @@
+<Window x:Class="EWMS_WPF.Views.Admin.UserEditWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Người dùng"
+        Height="420" Width="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#1A1D27">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="txtTitle" Text="Thêm người dùng" FontSize="18" FontWeight="SemiBold"
+                   Foreground="#F1F5F9" Margin="0,0,0,16"/>
+        <StackPanel Grid.Row="1">
+            <TextBlock Text="Tên đăng nhập *" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox x:Name="txtUsername" Padding="8" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Mật khẩu * (để trống khi sửa nếu giữ nguyên)" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <PasswordBox x:Name="txtPassword" Padding="8" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Họ tên" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox x:Name="txtFullName" Padding="8" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Email" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox x:Name="txtEmail" Padding="8" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Điện thoại" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <TextBox x:Name="txtPhone" Padding="8" Margin="0,0,0,10"/>
+
+            <TextBlock Text="Vai trò *" Foreground="#8A93B2" FontSize="12" Margin="0,0,0,4"/>
+            <ComboBox x:Name="cmbRole" DisplayMemberPath="RoleName" SelectedValuePath="RoleId"
+                      Padding="8" Margin="0,0,0,10"/>
+
+            <CheckBox x:Name="chkActive" Content="Tài khoản đang hoạt động" Foreground="#F1F5F9"
+                      IsChecked="True" Margin="0,4,0,0"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+            <Button Content="Hủy" Width="100" Margin="0,0,8,0" Padding="10,8" Click="BtnCancel_Click"
+                    Background="#2E3348" Foreground="White" BorderThickness="0" Cursor="Hand"/>
+            <Button Content="Lưu" Width="100" Padding="10,8" Click="BtnSave_Click"
+                    Background="#4F8EF7" Foreground="White" BorderThickness="0" Cursor="Hand"/>
+        </StackPanel>
+    </Grid>
+</Window>

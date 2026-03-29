@@ -52,7 +52,8 @@
                      CanUserAddRows="False"
                      GridLinesVisibility="Horizontal"
                      RowHeight="40"
-                     AlternatingRowBackground="#F9F9F9">
+                     AlternatingRowBackground="#F9F9F9"
+                     EnableRowVirtualization="False">
                 
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="SO ID" Binding="{Binding SalesOrderId}" Width="80"/>
@@ -81,10 +82,15 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn Header="Created Date" Binding="{Binding CreatedAt, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}" Width="150"/>
                     
-                    <DataGridTemplateColumn Header="Actions" Width="200">
+                    <DataGridTemplateColumn Header="Actions" Width="280">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Content="Edit" Padding="10,5" Margin="2"
+                                           Background="#2196F3" Foreground="White"
+                                           Click="BtnEdit_Click"
+                                           Tag="{Binding SalesOrderId}"
+                                           Visibility="{Binding Status, Converter={StaticResource StatusToVisibilityConverter}}"/>
                                     <Button Content="Details" Padding="10,5" Margin="2"
                                            Click="BtnDetails_Click"
                                            Tag="{Binding SalesOrderId}"/>
