@@ -17,7 +17,7 @@
                               FontSize="24" FontWeight="Bold"/>
                     <TextBlock x:Name="txtStatus" FontSize="14" Margin="0,5,0,0" FontWeight="SemiBold"/>
                 </StackPanel>
-                <Button Content="← Back" HorizontalAlignment="Right" Padding="15,8"
+                <Button Content=" Back" HorizontalAlignment="Right" Padding="15,8"
                        Click="BtnBack_Click"/>
             </Grid>
 

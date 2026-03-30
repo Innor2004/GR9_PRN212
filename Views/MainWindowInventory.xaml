@@ -73,15 +73,15 @@
                     <TextBlock Text="INVENTORY MENU" FontSize="14" FontWeight="Bold" 
                               Foreground="#666" Margin="15,10,15,10"/>
 
-                    <Button Content="📥 Stock In" 
+                    <Button Content=" Stock In" 
                            Style="{StaticResource MenuButtonStyle}"
                            Click="BtnStockIn_Click"/>
 
-                    <Button Content="📤 Stock Out" 
+                    <Button Content=" Stock Out" 
                            Style="{StaticResource MenuButtonStyle}"
                            Click="BtnStockOut_Click"/>
 
-                    <Button Content="📦 Inventory" 
+                    <Button Content=" Inventory" 
                            Style="{StaticResource MenuButtonStyle}"
                            Click="BtnInventory_Click"/>
                 </StackPanel>

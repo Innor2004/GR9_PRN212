@@ -73,10 +73,10 @@
                     <TextBlock Text="ADMIN MENU" FontSize="14" FontWeight="Bold" 
                           Foreground="#666" Margin="15,10,15,10"/>
 
-                    <Button Content="👤 User Management" 
+                    <Button Content=" User Management" 
                        Style="{StaticResource MenuButtonStyle}" Click="UserButton_Click"
                        />
-                    <Button Content="📦 Product Management" 
+                    <Button Content=" Product Management" 
                        Style="{StaticResource MenuButtonStyle}"
                             Click="ProductButton_Click"
                        />

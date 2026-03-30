@@ -73,7 +73,7 @@
                     <TextBlock Text="PURCHASE MENU" FontSize="14" FontWeight="Bold" 
                               Foreground="#666" Margin="15,10,15,10"/>
 
-                    <Button Content="📦 Purchase Orders" 
+                    <Button Content=" Purchase Orders" 
                            Style="{StaticResource MenuButtonStyle}"
                            Click="BtnPurchaseOrders_Click"/>
                 </StackPanel>

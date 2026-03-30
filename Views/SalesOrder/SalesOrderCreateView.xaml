@@ -90,7 +90,7 @@
                                  DisplayMemberPath="ProductName" Height="35"/>
                         <TextBox Grid.Column="2" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
                                 Height="35" VerticalContentAlignment="Center"/>
-                        <Button Grid.Column="4" Content="+ Add Product" Padding="20,8" 
+                        <Button Grid.Column="4" Content=" Add Product" Padding="20,8" 
                                Background="#4CAF50" Foreground="White"
                                Command="{Binding AddProductCommand}"/>
                     </Grid>

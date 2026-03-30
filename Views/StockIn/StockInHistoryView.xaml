@@ -17,8 +17,8 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,15">
             <TextBlock Text="Search by PO ID:" VerticalAlignment="Center" Margin="0,0,10,0" FontWeight="SemiBold"/>
             <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" Width="150" Height="35" VerticalContentAlignment="Center" Padding="5"/>
-            <Button Content="🔍 Search" Margin="10,0,0,0" Padding="15,8" Command="{Binding SearchCommand}"/>
-            <Button Content="← Back to List" Margin="20,0,0,0" Padding="15,8" Command="{Binding BackToListCommand}" Background="#9E9E9E" Foreground="White" BorderThickness="0"/>
+            <Button Content=" Search" Margin="10,0,0,0" Padding="15,8" Command="{Binding SearchCommand}"/>
+            <Button Content=" Back to List" Margin="20,0,0,0" Padding="15,8" Command="{Binding BackToListCommand}" Background="#9E9E9E" Foreground="White" BorderThickness="0"/>
         </StackPanel>
 
         <Border Grid.Row="2" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="5">

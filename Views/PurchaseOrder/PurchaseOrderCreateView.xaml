@@ -88,7 +88,7 @@
                         <TextBox Grid.Column="2" Text="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}" 
                                 Height="35" VerticalContentAlignment="Center"
                                 TextAlignment="Center"/>
-                        <Button Grid.Column="4" Content="+ Add" 
+                        <Button Grid.Column="4" Content=" Add" 
                                Padding="20,8" Background="#4CAF50" Foreground="White"
                                Command="{Binding AddProductCommand}"/>
                     </Grid>

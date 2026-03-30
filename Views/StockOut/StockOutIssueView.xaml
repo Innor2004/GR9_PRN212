@@ -90,11 +90,11 @@
 
         <!-- Actions -->
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Content="← Back to List" Padding="15,8" Margin="0,0,10,0"
+            <Button Content=" Back to List" Padding="15,8" Margin="0,0,10,0"
                    Command="{Binding BackToListCommand}"
                    Background="#9E9E9E" Foreground="White" BorderThickness="0" Cursor="Hand"/>
             
-            <Button Content="✓ Confirm Issue" Padding="15,8"
+            <Button Content=" Confirm Issue" Padding="15,8"
                    Command="{Binding ConfirmIssueCommand}"
                    Background="#FF9800" Foreground="White" BorderThickness="0" Cursor="Hand"/>
         </StackPanel>
