@@ -57,7 +57,6 @@ namespace EWMS_WPF.Views
                 });
             };
 
-            // Important: Handle password from PasswordBox
             txtPassword.PasswordChanged += (s, e) =>
             {
                 _viewModel.Password = txtPassword.Password;

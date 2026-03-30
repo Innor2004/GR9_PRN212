@@ -109,8 +109,7 @@ namespace EWMS_WPF.BLL
             }
         }
 
-        [RelayCommand]
-        private async Task LoadInventoryAsync()
+        public async Task LoadInventoryAsync()
         {
             if (string.IsNullOrEmpty(SelectedRack)) return;
 
