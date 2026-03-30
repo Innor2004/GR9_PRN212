@@ -45,8 +45,7 @@ namespace EWMS_WPF.BLL
             _sessionService = sessionService;
         }
 
-        [RelayCommand]
-        private async Task LoadPendingOrdersAsync()
+        public async Task LoadPendingOrdersAsync()
         {
             IsLoading = true;
             try

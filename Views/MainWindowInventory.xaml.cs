@@ -45,7 +45,6 @@ namespace EWMS_WPF.Views
         {
             var viewModel = App.ServiceProvider.GetRequiredService<StockInViewModel>();
             
-            // Setup navigation callbacks
             viewModel.OnNavigateToReceive = async (purchaseOrderId) =>
             {
                 await viewModel.LoadPurchaseOrderForReceiveAsync(purchaseOrderId);
@@ -74,7 +73,6 @@ namespace EWMS_WPF.Views
         {
             var viewModel = App.ServiceProvider.GetRequiredService<StockOutViewModel>();
             
-            // Setup navigation callbacks
             viewModel.OnNavigateToIssue = async (salesOrderId) =>
             {
                 await viewModel.LoadSalesOrderForIssueAsync(salesOrderId);

@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using EWMS_WPF.Models;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace EWMS_WPF.DAL
 {
@@ -26,15 +25,11 @@ namespace EWMS_WPF.DAL
         IGenericRepository<StockOutDetail> StockOutDetails { get; }
         
         Task<int> SaveChangesAsync();
-        Task BeginTransactionAsync();
-        Task CommitTransactionAsync();
-        Task RollbackTransactionAsync();
     }
 
     public class UnitOfWork : IUnitOfWork
     {
         private readonly EWMSDbContext _context;
-        private IDbContextTransaction? _transaction;
 
         private IGenericRepository<User>? _users;
         private IGenericRepository<Role>? _roles;
@@ -82,34 +77,8 @@ namespace EWMS_WPF.DAL
             return await _context.SaveChangesAsync();
         }
 
-        public async Task BeginTransactionAsync()
-        {
-            _transaction = await _context.Database.BeginTransactionAsync();
-        }
-
-        public async Task CommitTransactionAsync()
-        {
-            if (_transaction != null)
-            {
-                await _transaction.CommitAsync();
-                await _transaction.DisposeAsync();
-                _transaction = null;
-            }
-        }
-
-        public async Task RollbackTransactionAsync()
-        {
-            if (_transaction != null)
-            {
-                await _transaction.RollbackAsync();
-                await _transaction.DisposeAsync();
-                _transaction = null;
-            }
-        }
-
         public void Dispose()
         {
-            _transaction?.Dispose();
             _context.Dispose();
         }
     }

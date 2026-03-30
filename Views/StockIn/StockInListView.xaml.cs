@@ -14,7 +14,7 @@ namespace EWMS_WPF.Views.StockIn
             _viewModel = viewModel;
             DataContext = _viewModel;
 
-            Loaded += async (s, e) => await _viewModel.LoadPendingOrdersCommand.ExecuteAsync(null);
+            Loaded += async (s, e) => await _viewModel.LoadPendingOrdersAsync();
         }
 
         private void BtnReceive_Click(object sender, RoutedEventArgs e)

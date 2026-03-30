@@ -23,11 +23,9 @@ namespace EWMS_WPF.Views.Inventory
 
             _viewModel.PropertyChanged += async (s, e) =>
             {
-                // Only reload inventory when user manually changes rack selection
-                // Skip during initialization to prevent concurrent DbContext access
                 if (e.PropertyName == nameof(_viewModel.SelectedRack) && !_isInitializing)
                 {
-                    await _viewModel.LoadInventoryCommand.ExecuteAsync(null);
+                    await _viewModel.LoadInventoryAsync();
                 }
             };
         }
